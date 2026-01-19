@@ -88,41 +88,43 @@
         </section>
 
         <section class="pokedex-bottom">
-          <div class="calculator-section">
-            <input
-              type="text"
-              id="display"
-              class="calc-display"
-              readonly
-              value="0"
-            />
-            <div class="calculator-buttons">
-              <button class="btn function" onclick="clearDisplay()">CLR</button>
-              <button class="btn function" onclick="deleteLast()">DEL</button>
-              <button class="btn function" onclick="appendOperator('/')">/</button>
-              <button class="btn function" onclick="appendOperator('*')">x</button>
+          <div class="pad-bay">
+            <div class="calculator-section">
+              <input
+                type="text"
+                id="display"
+                class="calc-display"
+                readonly
+                value="0"
+              />
+              <div class="calculator-buttons">
+                <button class="btn function" onclick="clearDisplay()">CLR</button>
+                <button class="btn function" onclick="deleteLast()">DEL</button>
+                <button class="btn function" onclick="appendOperator('/')">/</button>
+                <button class="btn function" onclick="appendOperator('*')">x</button>
 
-              <button class="btn number" onclick="appendNumber('7')">7</button>
-              <button class="btn number" onclick="appendNumber('8')">8</button>
-              <button class="btn number" onclick="appendNumber('9')">9</button>
-              <button class="btn function" onclick="appendOperator('-')">-</button>
+                <button class="btn number" onclick="appendNumber('7')">7</button>
+                <button class="btn number" onclick="appendNumber('8')">8</button>
+                <button class="btn number" onclick="appendNumber('9')">9</button>
+                <button class="btn function" onclick="appendOperator('-')">-</button>
 
-              <button class="btn number" onclick="appendNumber('4')">4</button>
-              <button class="btn number" onclick="appendNumber('5')">5</button>
-              <button class="btn number" onclick="appendNumber('6')">6</button>
-              <button class="btn function" onclick="appendOperator('+')">+</button>
+                <button class="btn number" onclick="appendNumber('4')">4</button>
+                <button class="btn number" onclick="appendNumber('5')">5</button>
+                <button class="btn number" onclick="appendNumber('6')">6</button>
+                <button class="btn function" onclick="appendOperator('+')">+</button>
 
-              <button class="btn number" onclick="appendNumber('1')">1</button>
-              <button class="btn number" onclick="appendNumber('2')">2</button>
-              <button class="btn number" onclick="appendNumber('3')">3</button>
-              <button class="btn equals" onclick="calculate()" style="grid-row: span 2">
-                =
-              </button>
+                <button class="btn number" onclick="appendNumber('1')">1</button>
+                <button class="btn number" onclick="appendNumber('2')">2</button>
+                <button class="btn number" onclick="appendNumber('3')">3</button>
+                <button class="btn equals" onclick="calculate()" style="grid-row: span 2">
+                  =
+                </button>
 
-              <button class="btn number" onclick="appendNumber('0')" style="grid-column: span 2">
-                0
-              </button>
-              <button class="btn number" onclick="appendNumber('.')">.</button>
+                <button class="btn number" onclick="appendNumber('0')" style="grid-column: span 2">
+                  0
+                </button>
+                <button class="btn number" onclick="appendNumber('.')">.</button>
+              </div>
             </div>
           </div>
         </section>
