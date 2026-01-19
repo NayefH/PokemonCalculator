@@ -22,10 +22,8 @@ const placeholderImage =
   "</svg>";
 
 function setPokemonImage(number) {
-  const primary =
-    `https://raw.githubusercontent.com/PokeAPI/sprites/master/pokemon/other/official-artwork/${number}.png`;
-  const fallback =
-    `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png`;
+  const primary = `https://raw.githubusercontent.com/PokeAPI/sprites/master/pokemon/other/official-artwork/${number}.png`;
+  const fallback = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png`;
 
   pokemonImage.onerror = null;
   pokemonImage.src = primary;
