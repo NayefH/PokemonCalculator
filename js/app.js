@@ -24,13 +24,17 @@ const placeholderImage =
 function setPokemonImage(number) {
   const primary = `https://raw.githubusercontent.com/PokeAPI/sprites/master/pokemon/other/official-artwork/${number}.png`;
   const fallback = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png`;
+  const pixelUpscaleClass = "pixel-upscale";
 
   pokemonImage.onerror = null;
+  pokemonImage.classList.remove(pixelUpscaleClass);
   pokemonImage.src = primary;
   pokemonImage.onerror = () => {
     pokemonImage.onerror = () => {
+      pokemonImage.classList.remove(pixelUpscaleClass);
       pokemonImage.src = placeholderImage;
     };
+    pokemonImage.classList.add(pixelUpscaleClass);
     pokemonImage.src = fallback;
   };
 }
