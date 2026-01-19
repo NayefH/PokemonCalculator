@@ -126,7 +126,7 @@ body {
   max-width: 430px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0;
   filter: drop-shadow(0 24px 40px var(--shadow));
 }
 
@@ -141,6 +141,8 @@ body {
 .pokedex-top {
   background: linear-gradient(135deg, var(--red-shell), var(--red-dark));
   padding: 22px 22px 28px;
+  border-bottom: none;
+  border-radius: 24px 24px 0 0;
   animation: liftIn 0.8s ease both;
 }
 
@@ -155,7 +157,8 @@ body {
 .pokedex-bottom {
   background: linear-gradient(145deg, var(--blue-shell), var(--blue-dark));
   padding: 22px;
-  border-radius: 18px 18px 26px 26px;
+  border-top: none;
+  border-radius: 0 0 26px 26px;
   animation: liftIn 0.8s ease 0.12s both;
 }
 
@@ -259,18 +262,24 @@ body {
   background: linear-gradient(135deg, #dfe6ef, #b8c2d1);
   border: 3px solid #0f0f0f;
   border-radius: 12px;
-  padding: 10px;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 240px;
+  min-height: 280px;
+  overflow: hidden;
 }
 
 .pokemon-screen img {
-  max-width: 100%;
-  max-height: 220px;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.35));
+}
+
+.pokemon-screen img.pixel-upscale {
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 
 .pokemon-info {
@@ -321,6 +330,14 @@ body {
   height: 5px;
   border-radius: 6px;
   background: #111;
+}
+
+.pad-bay {
+  background: linear-gradient(145deg, #e8eef6, #cbd6e4);
+  border: 3px solid #111;
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: inset 0 6px 0 rgba(0, 0, 0, 0.18);
 }
 
 .calculator-section {
@@ -382,23 +399,142 @@ body {
   color: #0b1a2e;
 }
 
+@media (max-width: 860px) {
+  body {
+    padding: 24px 14px;
+    align-items: flex-start;
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 720px) {
+  .instruction-panel {
+    padding: 16px;
+  }
+
+  .pokedex-top {
+    padding: 18px 16px 22px;
+  }
+
+  .pokedex-bottom {
+    padding: 18px 16px;
+  }
+
+  .pokemon-screen {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .screen-bezel {
+    min-height: 230px;
+  }
+
+  .pad-bay {
+    padding: 12px;
+  }
+
+  .calc-display {
+    font-size: 1.2rem;
+    padding: 10px 12px;
+  }
+
+  .calculator-buttons {
+    gap: 8px;
+  }
+
+  .btn {
+    padding: 10px 4px;
+    font-size: 0.95rem;
+  }
+}
+
 @media (max-width: 520px) {
+  body {
+    padding: 18px 10px;
+  }
+
+  .instruction-title {
+    font-size: 1rem;
+  }
+
+  .instruction-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .instruction-list li {
+    font-size: 0.82rem;
+  }
+
+  .instruction-note {
+    font-size: 0.78rem;
+  }
+
   .pokedex {
     width: 100%;
   }
 
+  .pokedex-title {
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+  }
+
+  .lens {
+    width: 58px;
+    height: 58px;
+  }
+
+  .lens-core {
+    inset: 12px;
+  }
+
+  .lens-gloss {
+    width: 18px;
+    height: 18px;
+    top: 8px;
+    left: 9px;
+  }
+
+  .signal-lights {
+    gap: 6px;
+  }
+
+  .light {
+    width: 12px;
+    height: 12px;
+  }
+
   .screen-bezel {
-    min-height: 210px;
+    min-height: 200px;
   }
 
   .pokemon-screen img {
-    max-height: 190px;
+    max-height: 200px;
   }
-}
 
-@media (max-width: 860px) {
-  .layout {
-    grid-template-columns: 1fr;
+  .pokemon-info {
+    font-size: 0.85rem;
+    padding: 6px 8px;
+  }
+
+  .screen-controls .speaker span {
+    width: 34px;
+  }
+
+  .calc-display {
+    font-size: 1.1rem;
+  }
+
+  .calculator-buttons {
+    gap: 6px;
+  }
+
+  .btn {
+    padding: 9px 4px;
+    font-size: 0.9rem;
   }
 }
 
@@ -407,6 +543,7 @@ body {
     transform: translateY(18px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -414,12 +551,14 @@ body {
 }
 
 @keyframes lensPulse {
+
   0%,
   100% {
     transform: scale(1);
     box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.4),
       0 0 10px rgba(99, 199, 255, 0.6);
   }
+
   50% {
     transform: scale(1.05);
     box-shadow: inset 0 0 14px rgba(255, 255, 255, 0.6),
@@ -432,6 +571,7 @@ body {
     transform: scale(0.98);
     opacity: 0;
   }
+
   to {
     transform: scale(1);
     opacity: 1;
@@ -439,6 +579,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .pokedex-top,
   .pokedex-bottom,
   .lens,

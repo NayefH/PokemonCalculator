@@ -10,6 +10,9 @@ let operator = null;
 let shouldResetDisplay = false;
 let activeAudio = null;
 let fallbackAudioContext = null;
+let nameRequestId = 0;
+const nameCache = new Map();
+const inFlightNameRequests = new Map();
 
 const placeholderImage =
   "data:image/svg+xml;utf8," +
@@ -22,17 +25,19 @@ const placeholderImage =
   "</svg>";
 
 function setPokemonImage(number) {
-  const primary =
-    `https://raw.githubusercontent.com/PokeAPI/sprites/master/pokemon/other/official-artwork/${number}.png`;
-  const fallback =
-    `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png`;
+  const primary = `https://raw.githubusercontent.com/PokeAPI/sprites/master/pokemon/other/official-artwork/${number}.png`;
+  const fallback = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png`;
+  const pixelUpscaleClass = "pixel-upscale";
 
   pokemonImage.onerror = null;
+  pokemonImage.classList.remove(pixelUpscaleClass);
   pokemonImage.src = primary;
   pokemonImage.onerror = () => {
     pokemonImage.onerror = () => {
+      pokemonImage.classList.remove(pixelUpscaleClass);
       pokemonImage.src = placeholderImage;
     };
+    pokemonImage.classList.add(pixelUpscaleClass);
     pokemonImage.src = fallback;
   };
 }
@@ -42,6 +47,7 @@ function setPokemonDisplay(value, playSound) {
     return;
   }
 
+  const requestId = (nameRequestId += 1);
   const number = core.normalizePokedexNumber(value);
   if (!number) {
     pokemonName.textContent = "Ungueltig";
@@ -51,11 +57,128 @@ function setPokemonDisplay(value, playSound) {
   }
 
   setPokemonImage(number);
-  pokemonName.textContent = core.getPokemonName(number);
   pokemonNumberEl.textContent = `#${number}`;
+  setPokemonName(number, requestId);
 
   if (playSound) {
     playPokemonCry(number);
+  }
+}
+
+function setPokemonName(number, requestId) {
+  const cachedName = nameCache.get(number);
+  if (cachedName) {
+    pokemonName.textContent = cachedName;
+    return;
+  }
+
+  const knownName = core ? core.getPokemonName(number) : null;
+  if (knownName && knownName !== "Unbekannt") {
+    nameCache.set(number, knownName);
+    pokemonName.textContent = knownName;
+    return;
+  }
+
+  pokemonName.textContent = "Lade...";
+  fetchPokemonName(number)
+    .then((name) => {
+      if (requestId !== nameRequestId) {
+        return;
+      }
+      if (name) {
+        nameCache.set(number, name);
+        pokemonName.textContent = name;
+      } else {
+        pokemonName.textContent = "Unbekannt";
+      }
+    })
+    .catch(() => {
+      if (requestId === nameRequestId) {
+        pokemonName.textContent = "Unbekannt";
+      }
+    });
+}
+
+function fetchPokemonName(number) {
+  if (inFlightNameRequests.has(number)) {
+    return inFlightNameRequests.get(number);
+  }
+
+  const request = fetch(
+    `https://pokeapi.co/api/v2/pokemon-species/${number}`,
+  )
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Name request failed");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (!data) {
+        return null;
+      }
+      const names = Array.isArray(data.names) ? data.names : [];
+      const germanEntry = names.find(
+        (entry) => entry && entry.language && entry.language.name === "de",
+      );
+      if (germanEntry && germanEntry.name) {
+        return germanEntry.name;
+      }
+      const englishEntry = names.find(
+        (entry) => entry && entry.language && entry.language.name === "en",
+      );
+      if (englishEntry && englishEntry.name) {
+        return englishEntry.name;
+      }
+      if (data.name) {
+        return data.name;
+      }
+      return null;
+    })
+    .catch(() => null)
+    .finally(() => {
+      inFlightNameRequests.delete(number);
+    });
+
+  inFlightNameRequests.set(number, request);
+  return request;
+}
+
+function playButtonClick() {
+  try {
+    const AudioContextClass =
+      typeof window !== "undefined"
+        ? window.AudioContext || window.webkitAudioContext
+        : null;
+    if (!AudioContextClass) {
+      return;
+    }
+
+    if (!fallbackAudioContext) {
+      fallbackAudioContext = new AudioContextClass();
+    }
+
+    if (fallbackAudioContext.state === "suspended") {
+      fallbackAudioContext.resume().catch(() => {});
+    }
+
+    const oscillator = fallbackAudioContext.createOscillator();
+    const gainNode = fallbackAudioContext.createGain();
+    const now = fallbackAudioContext.currentTime;
+
+    oscillator.type = "square";
+    oscillator.frequency.setValueAtTime(720, now);
+    gainNode.gain.setValueAtTime(0.0001, now);
+    gainNode.gain.linearRampToValueAtTime(0.06, now + 0.01);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+
+    oscillator.connect(gainNode);
+    gainNode.connect(fallbackAudioContext.destination);
+
+    oscillator.start(now);
+    oscillator.stop(now + 0.085);
+  } catch (e) {
+    console.log("Button-Sound konnte nicht abgespielt werden");
   }
 }
 
@@ -151,6 +274,7 @@ function playFallbackSound() {
 }
 
 function appendNumber(num) {
+  playButtonClick();
   if (shouldResetDisplay) {
     currentValue = num === "." ? "0." : num;
     shouldResetDisplay = false;
@@ -180,8 +304,9 @@ function updateDisplay() {
 }
 
 function appendOperator(op) {
+  playButtonClick();
   if (operator !== null && !shouldResetDisplay) {
-    calculate();
+    calculate(false);
   }
 
   previousValue = currentValue;
@@ -189,7 +314,10 @@ function appendOperator(op) {
   shouldResetDisplay = true;
 }
 
-function calculate() {
+function calculate(playClickSound = true) {
+  if (playClickSound) {
+    playButtonClick();
+  }
   if (!core || operator === null || previousValue === "") {
     return;
   }
@@ -216,6 +344,7 @@ function calculate() {
 }
 
 function clearDisplay() {
+  playButtonClick();
   currentValue = "0";
   previousValue = "";
   operator = null;
@@ -225,6 +354,7 @@ function clearDisplay() {
 }
 
 function deleteLast() {
+  playButtonClick();
   if (shouldResetDisplay) {
     return;
   }
