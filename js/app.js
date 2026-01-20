@@ -50,7 +50,7 @@ function setPokemonDisplay(value, playSound) {
   const requestId = (nameRequestId += 1);
   const number = core.normalizePokedexNumber(value);
   if (!number) {
-    pokemonName.textContent = "Ungueltig";
+    pokemonName.textContent = "";
     pokemonNumberEl.textContent = "???";
     setPokemonImage(1);
     return;
@@ -89,12 +89,12 @@ function setPokemonName(number, requestId) {
         nameCache.set(number, name);
         pokemonName.textContent = name;
       } else {
-        pokemonName.textContent = "Unbekannt";
+        pokemonName.textContent = "";
       }
     })
     .catch(() => {
       if (requestId === nameRequestId) {
-        pokemonName.textContent = "Unbekannt";
+        pokemonName.textContent = "";
       }
     });
 }
@@ -162,21 +162,36 @@ function playButtonClick() {
       fallbackAudioContext.resume().catch(() => {});
     }
 
-    const oscillator = fallbackAudioContext.createOscillator();
+    const mainOscillator = fallbackAudioContext.createOscillator();
+    const sparkleOscillator = fallbackAudioContext.createOscillator();
     const gainNode = fallbackAudioContext.createGain();
     const now = fallbackAudioContext.currentTime;
+    const duration = 0.12;
 
-    oscillator.type = "square";
-    oscillator.frequency.setValueAtTime(720, now);
+    mainOscillator.type = "triangle";
+    sparkleOscillator.type = "sine";
+    mainOscillator.frequency.setValueAtTime(900, now);
+    mainOscillator.frequency.exponentialRampToValueAtTime(520, now + duration);
+    sparkleOscillator.frequency.setValueAtTime(1200, now);
+    sparkleOscillator.frequency.exponentialRampToValueAtTime(
+      760,
+      now + duration * 0.9,
+    );
     gainNode.gain.setValueAtTime(0.0001, now);
-    gainNode.gain.linearRampToValueAtTime(0.06, now + 0.01);
-    gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+    gainNode.gain.linearRampToValueAtTime(0.08, now + 0.012);
+    gainNode.gain.exponentialRampToValueAtTime(
+      0.0001,
+      now + duration,
+    );
 
-    oscillator.connect(gainNode);
+    mainOscillator.connect(gainNode);
+    sparkleOscillator.connect(gainNode);
     gainNode.connect(fallbackAudioContext.destination);
 
-    oscillator.start(now);
-    oscillator.stop(now + 0.085);
+    mainOscillator.start(now);
+    sparkleOscillator.start(now);
+    mainOscillator.stop(now + duration);
+    sparkleOscillator.stop(now + duration);
   } catch (e) {
     console.log("Button-Sound konnte nicht abgespielt werden");
   }
