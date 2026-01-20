@@ -1,134 +1,101 @@
 <!DOCTYPE html>
 <html lang="de">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pokedex Rechner</title>
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Orbitron:wght@400;600;700;900&display=swap"
-      rel="stylesheet"
-    />
-    <script src="js/core.js" defer></script>
-    <script src="js/app.js" defer></script>
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-  </head>
 
-  <body>
-    <div class="layout">
-      <aside class="instruction-panel">
-        <div class="instruction-header">
-          <h2 class="instruction-title">Bedienung</h2>
-          <span class="instruction-badge">MK-01</span>
-        </div>
-        <p class="instruction-subtitle">Pokedex Rechner Protokoll</p>
-        <ul class="instruction-list">
-          <li>
-            <span class="instruction-icon"></span>
-            <span>Tippe Zahlen, um die Pokedex-Nummer zu setzen.</span>
-          </li>
-          <li>
-            <span class="instruction-icon"></span>
-            <span>Nutze +, -, x, / und druecke = fuer das Ergebnis.</span>
-          </li>
-          <li>
-            <span class="instruction-icon"></span>
-            <span>CLR setzt alles zurueck, DEL loescht die letzte Ziffer.</span>
-          </li>
-          <li>
-            <span class="instruction-icon"></span>
-            <span>Das Ergebnis bestimmt Pokemon-Bild und Schrei.</span>
-          </li>
-        </ul>
-        <div class="instruction-note">
-          <strong>Hinweis:</strong> Wenn kein Sound kommt, einmal klicken, damit der
-          Browser Audio freigibt.
-        </div>
-      </aside>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pokedex-Rechner</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Orbitron:wght@400;600;700;900&display=swap"
+    rel="stylesheet" />
+  <script src="js/core.js" defer></script>
+  <script src="js/app.js" defer></script>
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+</head>
 
-      <main class="pokedex">
-        <section class="pokedex-top">
-          <header class="pokedex-header">
-            <div class="lens">
-              <div class="lens-core"></div>
-              <div class="lens-gloss"></div>
-            </div>
-            <div class="signal-lights">
-              <span class="light red"></span>
-              <span class="light yellow"></span>
-              <span class="light green"></span>
-            </div>
-            <h1 class="pokedex-title">Pokedex</h1>
-          </header>
+<body>
+  <div class="layout">
+    <h1 class="page-title">Pokedex Rechner</h1>
+    <main class="pokedex">
+      <section class="pokedex-top">
+        <header class="pokedex-header">
+          <div class="lens">
+            <div class="lens-core"></div>
+            <div class="lens-gloss"></div>
+          </div>
+          <div class="signal-lights">
+            <span class="light red"></span>
+            <span class="light yellow"></span>
+            <span class="light green"></span>
+          </div>
+          <h2 class="pokedex-title">Pokedex</h2>
+        </header>
 
-          <div class="pokemon-screen">
-            <div class="screen-bezel">
-              <img
-                id="pokemonImage"
-                src="https://raw.githubusercontent.com/PokeAPI/sprites/master/pokemon/other/official-artwork/1.png"
-                alt="Pokemon"
-              />
-            </div>
-            <div class="pokemon-info">
-              <span id="pokemonName" class="pokemon-name">Bisasam</span>
-              <span id="pokemonNumber" class="pokemon-number">#1</span>
-            </div>
-            <div class="screen-controls">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="speaker">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
+        <div class="pokemon-screen">
+          <div class="screen-bezel">
+            <img id="pokemonImage"
+              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/pokemon/other/official-artwork/1.png"
+              alt="Pokemon" />
+          </div>
+          <div class="pokemon-info">
+            <span id="pokemonName" class="pokemon-name">Bisasam</span>
+            <span id="pokemonNumber" class="pokemon-number">#1</span>
+          </div>
+          <div class="screen-controls">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="speaker">
+              <span></span>
+              <span></span>
+              <span></span>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section class="pokedex-bottom">
-          <div class="pad-bay">
-            <div class="calculator-section">
-              <input
-                type="text"
-                id="display"
-                class="calc-display"
-                readonly
-                value="0"
-              />
-              <div class="calculator-buttons">
-                <button class="btn function" onclick="clearDisplay()">CLR</button>
-                <button class="btn function" onclick="deleteLast()">DEL</button>
-                <button class="btn function" onclick="appendOperator('/')">/</button>
-                <button class="btn function" onclick="appendOperator('*')">x</button>
+      <section class="pokedex-bottom">
+        <div class="pad-bay">
+          <div class="calculator-section">
+            <input type="text" id="display" class="calc-display" readonly value="0" />
+            <div class="calculator-buttons">
+              <button class="btn function" onclick="clearDisplay()">CLR</button>
+              <button class="btn function" onclick="deleteLast()">DEL</button>
+              <button class="btn function" onclick="appendOperator('/')">/</button>
+              <button class="btn function" onclick="appendOperator('*')">x</button>
 
-                <button class="btn number" onclick="appendNumber('7')">7</button>
-                <button class="btn number" onclick="appendNumber('8')">8</button>
-                <button class="btn number" onclick="appendNumber('9')">9</button>
-                <button class="btn function" onclick="appendOperator('-')">-</button>
+              <button class="btn number" onclick="appendNumber('7')">7</button>
+              <button class="btn number" onclick="appendNumber('8')">8</button>
+              <button class="btn number" onclick="appendNumber('9')">9</button>
+              <button class="btn function" onclick="appendOperator('-')">-</button>
 
-                <button class="btn number" onclick="appendNumber('4')">4</button>
-                <button class="btn number" onclick="appendNumber('5')">5</button>
-                <button class="btn number" onclick="appendNumber('6')">6</button>
-                <button class="btn function" onclick="appendOperator('+')">+</button>
+              <button class="btn number" onclick="appendNumber('4')">4</button>
+              <button class="btn number" onclick="appendNumber('5')">5</button>
+              <button class="btn number" onclick="appendNumber('6')">6</button>
+              <button class="btn function" onclick="appendOperator('+')">+</button>
 
-                <button class="btn number" onclick="appendNumber('1')">1</button>
-                <button class="btn number" onclick="appendNumber('2')">2</button>
-                <button class="btn number" onclick="appendNumber('3')">3</button>
-                <button class="btn equals" onclick="calculate()" style="grid-row: span 2">
-                  =
-                </button>
+              <button class="btn number" onclick="appendNumber('1')">1</button>
+              <button class="btn number" onclick="appendNumber('2')">2</button>
+              <button class="btn number" onclick="appendNumber('3')">3</button>
+              <button class="btn equals" onclick="calculate()" style="grid-row: span 2">
+                =
+              </button>
 
-                <button class="btn number" onclick="appendNumber('0')" style="grid-column: span 2">
-                  0
-                </button>
-                <button class="btn number" onclick="appendNumber('.')">.</button>
-              </div>
+              <button class="btn number" onclick="appendNumber('0')" style="grid-column: span 2">
+                0
+              </button>
+              <button class="btn number" onclick="appendNumber('.')">.</button>
             </div>
           </div>
-        </section>
-      </main>
-    </div>
-  </body>
+        </div>
+      </section>
+
+      <section class="pokemonName">Made by Nayef Hajjaj</section>
+
+    </main>
+  </div>
+</body>
+
 </html>

@@ -32,11 +32,21 @@ body {
 }
 
 .layout {
-  width: min(940px, 100%);
+  width: min(430px, 100%);
   display: grid;
-  grid-template-columns: minmax(220px, 320px) minmax(320px, 430px);
-  gap: 28px;
-  align-items: center;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.page-title {
+  margin: 0;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 1.8rem;
+  color: #fdf7e1;
+  text-shadow: 0 4px 0 rgba(0, 0, 0, 0.35);
 }
 
 .instruction-panel {
@@ -52,9 +62,33 @@ body {
 .instruction-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 10px;
-  margin-bottom: 6px;
+  margin-bottom: 0;
+}
+
+.instruction-toggle {
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.instruction-toggle::-webkit-details-marker {
+  display: none;
+}
+
+.instruction-toggle::marker {
+  content: "";
+}
+
+.instruction-panel[open] .instruction-toggle {
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 2px dashed #111;
+}
+
+.instruction-toggle:focus-visible {
+  outline: 2px dashed #111;
+  outline-offset: 4px;
 }
 
 .instruction-title {
@@ -64,6 +98,7 @@ body {
 }
 
 .instruction-badge {
+  margin-left: auto;
   border: 2px solid #111;
   padding: 4px 8px;
   border-radius: 999px;
@@ -71,6 +106,26 @@ body {
   text-transform: uppercase;
   background: #111;
   color: #f7f0dc;
+}
+
+.instruction-caret {
+  margin-left: 8px;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 2px solid #111;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: #111;
+  color: #f7f0dc;
+  transition: transform 0.2s ease;
+}
+
+.instruction-panel[open] .instruction-caret {
+  transform: rotate(180deg);
 }
 
 .instruction-subtitle {
@@ -457,6 +512,11 @@ body {
     padding: 18px 10px;
   }
 
+  .page-title {
+    font-size: 1.35rem;
+    letter-spacing: 1px;
+  }
+
   .instruction-title {
     font-size: 1rem;
   }
@@ -585,5 +645,9 @@ body {
   .lens,
   .pokemon-screen {
     animation: none;
+  }
+
+  .instruction-caret {
+    transition: none;
   }
 }
