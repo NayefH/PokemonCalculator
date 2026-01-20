@@ -1,4 +1,4 @@
-# Pokedex Rechner
+# Pokedex-Rechner
 
 ## Uebersicht
 Ein Pokedex-inspirierter Taschenrechner, der Zahlen als Pokedex-Nummern interpretiert
