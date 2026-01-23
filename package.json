@@ -4,5 +4,8 @@
   "private": true,
   "scripts": {
     "test": "node tests/core.test.js"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^1.6.1"
   }
 }
